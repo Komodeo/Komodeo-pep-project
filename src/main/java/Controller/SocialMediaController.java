@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
 import Service.AccountService;
+
+import Model.Message;
+import Service.MessageService;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -18,9 +22,11 @@ import io.javalin.http.Context;
 public class SocialMediaController {
     // map account service
     AccountService accountService;
+    MessageService messageService;
 
     public SocialMediaController() {
         accountService = new AccountService();
+        messageService = new MessageService();
     }
 
     /**
@@ -35,6 +41,8 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.post("/register", this::registerHandler);
         app.post("/login", this::loginHandler);
+
+        app.post("/messages", this::postMessageHandler);
 
         return app;
     }
@@ -92,10 +100,39 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account loggedAccount = accountService.loginAccount(account);
-        if (loggedAccount==null) {
+        if (loggedAccount == null) {
             ctx.status(401);
         } else {
             ctx.json(mapper.writeValueAsString(loggedAccount));
+        }
+    }
+
+    /*
+     * Handler to post a new message.
+     * ## 3: Our API should be able to process the creation of new messages.
+     * 
+     * As a user, I should be able to submit a new post on the endpoint POST
+     * localhost:8080/messages. The request body will contain a JSON representation
+     * of a message, which should be persisted to the database, but will not contain
+     * a message_id.
+     * 
+     * - The creation of the message will be successful if and only if the
+     * message_text is not blank, is not over 255 characters, and posted_by refers
+     * to a real, existing user. If successful, the response body should contain a
+     * JSON of the message, including its message_id. The response status should be
+     * 200, which is the default. The new message should be persisted to the
+     * database.
+     * - If the creation of the message is not successful, the response status
+     * should be 400. (Client error)
+     */
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
+        if (addedMessage != null) {
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        } else {
+            ctx.status(400);
         }
     }
 
