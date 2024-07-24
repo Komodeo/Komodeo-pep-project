@@ -23,7 +23,7 @@ public class AccountService {
     }
 
     /*
-     * TODO: Use the AccountDAO to add (register) a new account to the database.
+     * DONE: Use the AccountDAO to add (register) a new account to the database.
      * 
      * This method should also return the added account.
      * 
@@ -32,5 +32,17 @@ public class AccountService {
      */
     public Account addAccount(Account account){
         return accountDAO.insertAccount(account);
+    }
+
+    /*
+     * DONE: Use the AccountDAO to login an existing account to the database.
+     * 
+     * This method should also return the account to login.
+     * 
+     * @param account an object representing an existing Account.
+     * @return the matching account if the login operation was successful
+     */
+    public Account loginAccount(Account account){
+        return accountDAO.loginAccount(account);
     }
 }
