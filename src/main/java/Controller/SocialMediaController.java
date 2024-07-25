@@ -12,6 +12,8 @@ import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.List;
+
 /**
  * TODO: You will need to write your own endpoints and handlers for your
  * controller. The endpoints you will need can be
@@ -43,6 +45,7 @@ public class SocialMediaController {
         app.post("/login", this::loginHandler);
 
         app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
 
         return app;
     }
@@ -136,14 +139,21 @@ public class SocialMediaController {
         }
     }
 
-    /**
-     * This is an example handler for an example endpoint.
+    /*
+     * Handler to retrieve all messages.
+     * ## 4: Our API should be able to retrieve all messages.
      * 
-     * @param context The Javalin Context object manages information about both the
-     *                HTTP request and response.
+     * As a user, I should be able to submit a GET request on the endpoint GET
+     * localhost:8080/messages.
+     * 
+     * - The response body should contain a JSON representation of a list containing
+     * all messages retrieved from the database. It is expected for the list to
+     * simply be empty if there are no messages. The response status should always
+     * be 200, which is the default.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    public void getAllMessagesHandler(Context ctx) {
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
     }
 
 }
