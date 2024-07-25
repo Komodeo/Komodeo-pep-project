@@ -49,4 +49,14 @@ public class MessageService {
         return messageDAO.getAllMessages();
     }
 
+    /*
+     * DONE: Use the messageDAO to retrieve a message using its ID.
+     * 
+     * @param message_id the id of the message to retrieve
+     * @return message a message object
+     */
+    public Message getMessageById(int message_id) {
+        return messageDAO.getMessageById(message_id);
+    }
+
 }

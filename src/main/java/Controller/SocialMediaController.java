@@ -46,6 +46,7 @@ public class SocialMediaController {
 
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageByIdHandler);
 
         return app;
     }
@@ -154,6 +155,26 @@ public class SocialMediaController {
     public void getAllMessagesHandler(Context ctx) {
         List<Message> messages = messageService.getAllMessages();
         ctx.json(messages);
+    }
+
+    /*
+     * ## 5: Our API should be able to retrieve a message by its ID.
+     * 
+     * As a user, I should be able to submit a GET request on the endpoint GET
+     * localhost:8080/messages/{message_id}.
+     * 
+     * - The response body should contain a JSON representation of the message
+     * identified by the message_id. It is expected for the response body to simply
+     * be empty if there is no such message. The response status should always be
+     * 200, which is the default.
+     */
+    public void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.getMessageById(message_id);
+        if (message == null)
+            ctx.status(200);
+        else
+            ctx.json(message);
     }
 
 }
