@@ -47,6 +47,7 @@ public class SocialMediaController {
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageByIdHandler);
 
         return app;
     }
@@ -158,6 +159,7 @@ public class SocialMediaController {
     }
 
     /*
+     * Handler to retrieve a message by its ID.
      * ## 5: Our API should be able to retrieve a message by its ID.
      * 
      * As a user, I should be able to submit a GET request on the endpoint GET
@@ -171,6 +173,30 @@ public class SocialMediaController {
     public void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message message = messageService.getMessageById(message_id);
+        if (message == null)
+            ctx.status(200);
+        else
+            ctx.json(message);
+    }
+
+    /*
+     * Handler to delete a message by its ID.
+     * ## 6: Our API should be able to delete a message identified by a message ID.
+     * 
+     * As a User, I should be able to submit a DELETE request on the endpoint DELETE
+     * localhost:8080/messages/{message_id}.
+     * 
+     * - The deletion of an existing message should remove an existing message from
+     * the database. If the message existed, the response body should contain the
+     * now-deleted message. The response status should be 200, which is the default.
+     * - If the message did not exist, the response status should be 200, but the
+     * response body should be empty. This is because the DELETE verb is intended to
+     * be idempotent, ie, multiple calls to the DELETE endpoint should respond with
+     * the same type of response.
+     */
+    public void deleteMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.deleteMessageById(message_id);
         if (message == null)
             ctx.status(200);
         else

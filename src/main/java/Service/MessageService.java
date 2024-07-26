@@ -59,4 +59,14 @@ public class MessageService {
         return messageDAO.getMessageById(message_id);
     }
 
+    /*
+     * DONE: Use the messageDAO to delete a message using its ID.
+     * 
+     * @param message_id the id of the message to delete
+     * @return message a message object
+     */
+    public Message deleteMessageById(int message_id) {
+        return messageDAO.deleteMessageById(message_id);
+    }
+
 }
