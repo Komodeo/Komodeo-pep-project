@@ -111,4 +111,32 @@ public class MessageDAO {
         }
         return deletedMessage;
     }
+
+    /*
+     * TODO: update a message from the message table by ID.
+     * 
+     * @param message_id the id of the message to retrieve
+     * @param message_text the updated text for the message
+     * 
+     * @return message a message object
+     */
+    public Message updateMessageTextById(int message_id, String message_text) {
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, message_text);
+            preparedStatement.setInt(2, message_id);
+
+            preparedStatement.executeUpdate();
+
+            Message message = this.getMessageById(message_id);
+            return message;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
 }

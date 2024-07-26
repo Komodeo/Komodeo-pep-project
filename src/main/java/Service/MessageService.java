@@ -69,4 +69,15 @@ public class MessageService {
         return messageDAO.deleteMessageById(message_id);
     }
 
+    /*
+     * TODO: Use the messageDAO to update a message text using its ID.
+     * 
+     * @param message_id the id of the message to update
+     * @param message_text the updated text for the message
+     * @return message a message object
+     */
+    public Message updateMessageTextById(int message_id, String message_text) {
+        return messageDAO.updateMessageTextById(message_id, message_text);
+    }
+
 }
