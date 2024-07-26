@@ -113,7 +113,7 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: update a message from the message table by ID.
+     * DONE: update a message from the message table by ID.
      * 
      * @param message_id the id of the message to retrieve
      * @param message_text the updated text for the message
@@ -137,6 +137,35 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * DONE: retrieve all messages from a specific user.
+     * 
+     * @param account_id the id of the user
+     * @return messages all messages by user
+     */
+    public List<Message> getAllMessagesByUser(int account_id) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, account_id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Message message = new Message(rs.getInt("message_id"),
+                        rs.getInt("posted_by"),
+                        rs.getString("message_text"),
+                        rs.getLong("time_posted_epoch"));
+                messages.add(message);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return messages;
     }
 
 }

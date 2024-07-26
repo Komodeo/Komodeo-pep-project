@@ -70,7 +70,7 @@ public class MessageService {
     }
 
     /*
-     * TODO: Use the messageDAO to update a message text using its ID.
+     * DONE: Use the messageDAO to update a message text using its ID.
      * 
      * @param message_id the id of the message to update
      * @param message_text the updated text for the message
@@ -78,6 +78,16 @@ public class MessageService {
      */
     public Message updateMessageTextById(int message_id, String message_text) {
         return messageDAO.updateMessageTextById(message_id, message_text);
+    }
+
+    /*
+     * DONE: Use the messageDAO to retrieve all messages from a specific user.
+     * 
+     * @param account_id the id of the user
+     * @return messages all messages by user
+     */
+    public List<Message> getAllMessagesByUser(int account_id) {
+        return messageDAO.getAllMessagesByUser(account_id);
     }
 
 }

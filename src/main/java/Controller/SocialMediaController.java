@@ -16,7 +16,7 @@ import io.javalin.http.Context;
 import java.util.List;
 
 /**
- * TODO: You will need to write your own endpoints and handlers for your
+ * DONE: You will need to write your own endpoints and handlers for your
  * controller. The endpoints you will need can be
  * found in readme.md as well as the test cases. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a
@@ -50,6 +50,8 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
         app.delete("/messages/{message_id}", this::deleteMessageByIdHandler);
         app.patch("/messages/{message_id}", this::updateMessageTextByIdHandler);
+
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesByUserHandler);
 
         return app;
     }
@@ -236,6 +238,28 @@ public class SocialMediaController {
         } else {
             ctx.json(mapper.writeValueAsString(message));
         }
+    }
+
+    /*
+     * Handler to retrieve all messages from a specific user
+     * ## 8: Our API should be able to retrieve all messages written by a particular
+     * user.
+     * 
+     * As a user, I should be able to submit a GET request on the endpoint GET
+     * localhost:8080/accounts/{account_id}/messages.
+     * 
+     * - The response body should contain a JSON representation of a list containing
+     * all messages posted by a particular user, which is retrieved from the
+     * database. It is expected for the list to simply be empty if there are no
+     * messages. The response status should always be 200, which is the default.
+     */
+    public void getAllMessagesByUserHandler(Context ctx) throws JsonProcessingException {
+        int account_id = Integer.parseInt(ctx.pathParam("account_id"));
+        List<Message> messages = messageService.getAllMessagesByUser(account_id);
+        if (messages == null)
+            ctx.status(200);
+        else
+            ctx.json(messages);
     }
 
 }
